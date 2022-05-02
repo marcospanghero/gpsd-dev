@@ -2106,6 +2106,9 @@ static void gpsd_terminate(struct gps_context_t *context)
 
 int main(int argc, char *argv[])
 {
+
+    printf("HELLO GPS WORLD!! \n");
+
     // some of these statics suppress -W warnings due to longjmp()
 #ifdef SOCKET_EXPORT_ENABLE
     static char *gpsd_service = NULL;
