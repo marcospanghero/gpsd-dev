@@ -120,7 +120,11 @@ static gps_mask_t ubx_msg_nav_sbas(struct gps_device_t *session,
                                    unsigned char *buf, size_t data_len);
 static gps_mask_t ubx_msg_tim_tp(struct gps_device_t *session,
                                  unsigned char *buf, size_t data_len);
+static gps_mask_t ubx_msg_nav_clock(struct gps_device_t *session, unsigned char *buf,
+                                    size_t data_len);
 static void ubx_mode(struct gps_device_t *session, int mode);
+
+
 
 typedef struct {
     const char *fw_string;
@@ -2335,6 +2339,10 @@ ubx_msg_nav_clock(struct gps_device_t *session, unsigned char *buf,
     clkD = getles32(buf, 8);
     tAcc = getleu32(buf, 12);
     fAcc = getleu32(buf, 16);
+    session->newdata.clockspec.clock_bias = clkB / NS_IN_SEC;
+    session->newdata.clockspec.clock_drift = clkD / NS_IN_SEC;
+    session->newdata.clockspec.tAcc_estimate = tAcc / NS_IN_SEC;
+    session->newdata.clockspec.fAcc_estimate = fAcc / PS_IN_SEC;
     GPSD_LOG(LOG_PROG, &session->context->errout,
              "NAV-CLOCK: iTOW=%lld clkB %ld clkD %ld tAcc %lu fAcc %lu\n",
              (long long)session->driver.ubx.iTOW, clkB, clkD, tAcc, fAcc);
