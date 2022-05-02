@@ -9,6 +9,7 @@
 #include <math.h>          // for modf()
 #include <stdbool.h>       // for bool
 
+#define PS_IN_SEC       1000000000000LL     // nanoseconds in a second
 #define NS_IN_SEC       1000000000LL     // nanoseconds in a second
 #define NS_IN_MS        1000000LL        // nanoseconds in a millisecond
 #define US_IN_SEC       1000000LL        // microseconds in a second
