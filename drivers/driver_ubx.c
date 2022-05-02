@@ -2328,6 +2328,9 @@ ubx_msg_nav_clock(struct gps_device_t *session, unsigned char *buf,
     long clkB, clkD;
     unsigned long tAcc, fAcc;
 
+    gps_mask_t mask = 0;
+
+
     if (20 > data_len) {
         GPSD_LOG(LOG_WARN, &session->context->errout,
                  "UBX-NAV-CLOCK message, runt payload len %zd", data_len);
@@ -2344,9 +2347,9 @@ ubx_msg_nav_clock(struct gps_device_t *session, unsigned char *buf,
     session->newdata.clockspec.tAcc_estimate = tAcc;
     session->newdata.clockspec.fAcc_estimate = fAcc;
     GPSD_LOG(LOG_PROG, &session->context->errout,
-             "NAV-CLOCK: iTOW=%lld clkB %ld clkD %ld tAcc %lu fAcc %lu\n",
+             "UBX-NAV-CLOCK: iTOW=%lld clkB %ld clkD %ld tAcc %lu fAcc %lu\n",
              (long long)session->driver.ubx.iTOW, clkB, clkD, tAcc, fAcc);
-    return 0;
+    return mask;
 }
 
 /**
@@ -3638,6 +3641,7 @@ gps_mask_t ubx_parse(struct gps_device_t * session, unsigned char *buf,
         GPSD_LOG(LOG_PROG, &session->context->errout, "UBX-NAV-ATT\n");
         break;
     case UBX_NAV_CLOCK:
+        GPSD_LOG(LOG_PROG, &session->context->errout, "UBX-NAV-CLOCK\n");
         mask = ubx_msg_nav_clock(session, &buf[UBX_PREFIX_LEN], data_len);
         break;
     case UBX_NAV_DGPS:
