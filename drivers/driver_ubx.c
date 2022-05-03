@@ -2328,7 +2328,7 @@ ubx_msg_nav_clock(struct gps_device_t *session, unsigned char *buf,
     long clkB, clkD;
     unsigned long tAcc, fAcc;
 
-    gps_mask_t mask = 0;
+    gps_mask_t mask = CLOCK_SET;
 
 
     if (20 > data_len) {
