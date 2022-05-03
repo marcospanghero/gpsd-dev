@@ -318,7 +318,7 @@ struct gps_context_t {
     int valid;                          // member validity flags
 #define LEAP_SECOND_VALID       0x01    // we have or don't need correction
 #define GPS_TIME_VALID          0x02    // GPS week/tow is valid
-#define CENTURY_VALID           0x04    // have received ZDA or 4-digit year
+#define CENTURY_VALID           0x04    // have received ZDA or 4-digit yearupdate
     struct gpsd_errout_t errout;        // debug verbosity level and hook
     bool readonly;                      // if true, never write to device
     bool passive;                       // if true, never autoconfigure device
