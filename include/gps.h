@@ -215,10 +215,10 @@ struct gps_fix_t {
     double epc;         // Vertical speed uncertainty
 
     struct{
-        double clock_bias;
-        double clock_drift;
-        double tAcc_estimate;
-        double fAcc_estimate;
+        int clock_bias;
+        int clock_drift;
+        int tAcc_estimate;
+        int fAcc_estimate;
     } clockspec;
 
     // estimated position error horizontal (2D). Meters, maybe 50%, maybe 95%
