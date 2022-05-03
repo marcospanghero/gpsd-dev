@@ -267,7 +267,7 @@ void json_tpv_dump(const gps_mask_t changed, const struct gps_device_t *session,
         str_appendf(reply, replylen, ",\"status\":%d", gpsdata->fix.status);
     }
     str_appendf(reply, replylen, ",\"mode\":%d", gpsdata->fix.mode);
-    str_appendf(reply, replylen, ",\"clock\":[{\"clock_bias\":%d,\"clock_drift\":%d,\"tacc_est\":%d,\"facc_est\":%d}]", gpsdata->fix.clockspec.clock_bias, gpsdata->fix.clockspec.clock_drift, gpsdata->fix.clockspec.tAcc_estimate, gpsdata->fix.clockspec.fAcc_estimate);
+    str_appendf(reply, replylen, ",\"clock_bias\":%d,\"clock_drift\":%d,\"tacc_est\":%d,\"facc_est\":%d", gpsdata->fix.clockspec.clock_bias, gpsdata->fix.clockspec.clock_drift, gpsdata->fix.clockspec.tAcc_estimate, gpsdata->fix.clockspec.fAcc_estimate);
     if (0 < gpsdata->fix.time.tv_sec) {
         char tbuf[JSON_DATE_MAX+1];
         str_appendf(reply, replylen,
