@@ -378,6 +378,14 @@ void gps_merge_fix(struct gps_fix_t *to,
         (NULL == from)) {
         return;
     }
+
+    if (0 != (transfer & CLOCK_SET)) {
+        to->clockspec.clock_bias = from->clockspec.clock_bias;
+        to->clockspec.clock_drift = from->clockspec.clock_drift;
+        to->clockspec.tAcc_estimate = from->clockspec.tAcc_estimate;
+        to->clockspec.fAcc_estimate = from->clockspec.fAcc_estimate;
+    } 
+
     if (0 != (transfer & TIME_SET)) {
         to->time = from->time;
     }
