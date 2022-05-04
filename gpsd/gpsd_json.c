@@ -275,7 +275,7 @@ void json_tpv_dump(const gps_mask_t changed, const struct gps_device_t *session,
                        timespec_to_iso8601(gpsdata->fix.time,
                                       tbuf, sizeof(tbuf)));
         str_appendf(reply, replylen, ",\"frac_gps\":%d",
-                    session->context->time.tv_nsec);
+                    gpsdata->fix.time.tv_nsec);
     }
     if (LEAP_SECOND_VALID == (session->context->valid & LEAP_SECOND_VALID)) {
         str_appendf(reply, replylen, ",\"leapseconds\":%d",
@@ -297,7 +297,7 @@ void json_tpv_dump(const gps_mask_t changed, const struct gps_device_t *session,
         str_appendf(reply, replylen, ",\"leapseconds_gal\":%d",
                     session->context->gal_leap_seconds);
         str_appendf(reply, replylen, ",\"frac_gal\":%d",
-                    session->context->time_gal.tv_nsec);
+                    gpsdata->fix.time_gal.tv_nsec);
     }
     if (0 < gpsdata->fix.time_gal.tv_sec) {
         // do not output ept_gal if no time_gal.
