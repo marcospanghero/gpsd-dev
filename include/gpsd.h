@@ -201,7 +201,7 @@ enum isgpsstat_t {
  * that are actually valid.
  */
 #define GPS_EPOCH       ((time_t)315964800)   /* 6 Jan 1980 00:00:00 UTC */
-#define GAL_EPOCH       ((time_t)935272787)   /* 22 Aug 1999 00:00:00 UTC */
+#define GAL_EPOCH       ((time_t)935272790)   /* 22 Aug 1999 00:00:00 UTC */
 
 /* time constant */
 #define SECS_PER_DAY    ((time_t)(60*60*24))  /* seconds per day */
