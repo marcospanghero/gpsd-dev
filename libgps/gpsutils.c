@@ -386,6 +386,13 @@ void gps_merge_fix(struct gps_fix_t *to,
         to->clockspec.fAcc_estimate = from->clockspec.fAcc_estimate;
     } 
 
+    // Galileo merge
+
+    if (0 != (transfer & GALTIME_SET)) {
+        to->time_gal = from->time_gal;
+        to->gal_ept = from->gal_ept;
+    }
+
     if (0 != (transfer & TIME_SET)) {
         to->time = from->time;
     }

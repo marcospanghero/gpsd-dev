@@ -201,6 +201,7 @@ enum isgpsstat_t {
  * that are actually valid.
  */
 #define GPS_EPOCH       ((time_t)315964800)   /* 6 Jan 1980 00:00:00 UTC */
+#define GAL_EPOCH       ((time_t)935272787)   /* 22 Aug 1999 00:00:00 UTC */
 
 /* time constant */
 #define SECS_PER_DAY    ((time_t)(60*60*24))  /* seconds per day */
@@ -354,7 +355,17 @@ struct gps_context_t {
 #endif
     ssize_t (*serial_write)(struct gps_device_t *,
                             const char *buf, const size_t len);
+
+    /*
+    * We add here some of the Galileo stuff as well. Now, this does not make too much sense as the context is called gps_context, but I guess a more accurate way of calling it would be gnss_context as most receivers are multiconstellation nowadays
+    */
+    unsigned short gal_week;            // GAL week, usually 10 bits
+    timespec_t gal_tow;                 // GAL time of week
+    int gal_leap_seconds;                // Unix sec to UTC (GAL-UTC offset)
+
+
 };
+
 
 // state for resolving interleaved Type 24 packets
 struct ais_type24a_t {
@@ -960,6 +971,8 @@ extern ssize_t gpsd_write(struct gps_device_t *, const char *, const size_t);
 extern void gpsd_time_init(struct gps_context_t *, time_t);
 extern void gpsd_set_century(struct gps_device_t *);
 extern timespec_t gpsd_gpstime_resolv(struct gps_device_t *, unsigned,
+                                      timespec_t);
+extern timespec_t gpsd_galtime_resolv(struct gps_device_t *, unsigned,
                                       timespec_t);
 extern timespec_t gpsd_utc_resolve(struct gps_device_t *);
 extern void gpsd_century_update(struct gps_device_t *, int);

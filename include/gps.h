@@ -214,6 +214,15 @@ struct gps_fix_t {
     double climb;       // Vertical speed, meters/sec
     double epc;         // Vertical speed uncertainty
 
+    /*
+    * Same stuff as other places: this is a GPS related structure, but with multiconstellation GNSS would be better. For now we can live with this inconsistency
+    */
+
+    timespec_t  time_gal;   // Galileo time
+    double      gal_ept;    // Expected time uncetainty in seconds
+    timespec_t time_bds;
+    timespec_t time_glo;
+
     struct{
         int clock_bias;
         int clock_drift;
@@ -2739,7 +2748,8 @@ struct gps_data_t {
 #define LOG_SET         (1llu<<42)
 #define IMU_SET         (1llu<<43)
 #define CLOCK_SET       (1llu<<44)
-#define SET_HIGH_BIT    45
+#define GALTIME_SET     (1llu<<45)
+#define SET_HIGH_BIT    46
     timespec_t online;          /* NZ if GPS is on line, 0 if not.
                                  *
                                  * Note: gpsd clears this time when sentences

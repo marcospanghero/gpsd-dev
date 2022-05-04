@@ -441,4 +441,22 @@ timespec_t gpsd_gpstime_resolv(struct gps_device_t *session,
     return t;
 }
 
+timespec_t gpsd_galtime_resolv(struct gps_device_t *session,
+                               unsigned week, timespec_t tow)
+{
+    timespec_t t;
+    /*
+    *We liberally copy the implementations structure from the gpstime resolver. We just need to add a new macro that tells this function where is the beginning of time. For now we assume that Galileo will not overflow at a 10-bit week length, but play nice. We need to add week number to the context
+    */
+
+    t.tv_sec = GAL_EPOCH + ((time_t)week * SECS_PER_WEEK) + tow.tv_sec;
+    t.tv_sec -= session->context->gal_leap_seconds;
+    t.tv_nsec = tow.tv_nsec;
+
+    return t;
+
+    // NB: THIS CODE WILL BREAK IN 2038!!!!
+
+}
+
 // vim: set expandtab shiftwidth=4

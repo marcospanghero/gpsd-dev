@@ -234,6 +234,10 @@ typedef enum {
 #define UBX_TIMEGPS_VALID_WEEK        0x02
 #define UBX_TIMEGPS_VALID_LEAP_SECOND 0x04
 
+#define UBX_TIMEGAL_VALID_TIME        0x01
+#define UBX_TIMEGAL_VALID_WEEK        0x02
+#define UBX_TIMEGAL_VALID_LEAP_SECOND 0x04
+
 /* from UBX_NAV_SVINFO */
 #define UBX_SAT_USED 0x01
 #define UBX_SAT_DGPS 0x02

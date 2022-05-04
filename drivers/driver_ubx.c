@@ -2549,6 +2549,49 @@ ubx_msg_nav_timegps(struct gps_device_t *session, unsigned char *buf,
     return mask;
 }
 
+
+/**
+ * UBX-NAV-TIMEGAL
+ */
+
+static gps_mask_t
+ubx_msg_nav_timegal(struct gps_device_t *session, unsigned char *buf,
+                    size_t data_len)
+{
+    uint8_t valid;
+    gps_mask_t mask = 0;
+    if (20 > data_len) {
+        GPSD_LOG(LOG_WARN, &session->context->errout,
+                 "UBX-NAV-TIMEGAL message, runt payload len %zd", data_len);
+        return 0;
+    }
+    session->driver.ubx.iTOW = getleu32(buf, 0);
+    valid = getub(buf, 15);
+
+    if ((valid & UBX_TIMEGAL_VALID_LEAP_SECOND) ==
+        UBX_TIMEGAL_VALID_LEAP_SECOND) {
+        session->context->gal_leap_seconds = (int)getub(buf, 14);
+    }
+
+    if ((UBX_TIMEGAL_VALID_TIME & valid) == UBX_TIMEGAL_VALID_TIME){
+        // Galileo Tow is valid
+        uint16_t week;
+        double tAcc;
+        timespec_t ts_tow;
+        week = getles16(buf, 12);
+        ts_tow.tv_sec = getleu32(buf, 4);
+        ts_tow.tv_nsec += (long)getles32(buf, 8);
+        TS_NORM(&ts_tow);
+
+        session->newdata.time_gal = gpsd_galtime_resolv(session, week, ts_tow);
+
+        tAcc = (double)getleu32(buf, 16);     // tAcc in ns
+        session->newdata.gal_ept = tAcc * 1e-9;
+        mask |= (GALTIME_SET);
+    }
+    return mask;
+}
+
 /**
  * UBX-NAV-TIMEUTC
  */
@@ -3740,6 +3783,7 @@ gps_mask_t ubx_parse(struct gps_device_t * session, unsigned char *buf,
         GPSD_LOG(LOG_PROG, &session->context->errout, "UBX-NAV-TIMEBDS\n");
         break;
     case UBX_NAV_TIMEGAL:
+        mask = ubx_msg_nav_timegal(session, &buf[UBX_PREFIX_LEN], data_len);
         GPSD_LOG(LOG_PROG, &session->context->errout, "UBX-NAV-TIMEGAL\n");
         break;
     case UBX_NAV_TIMEGLO:
