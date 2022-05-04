@@ -274,6 +274,8 @@ void json_tpv_dump(const gps_mask_t changed, const struct gps_device_t *session,
                        ",\"time\":\"%s\"",
                        timespec_to_iso8601(gpsdata->fix.time,
                                       tbuf, sizeof(tbuf)));
+        str_appendf(reply, replylen, ",\"frac_gps\":%d",
+                    session->context->time.tv_nsec);
     }
     if (LEAP_SECOND_VALID == (session->context->valid & LEAP_SECOND_VALID)) {
         str_appendf(reply, replylen, ",\"leapseconds\":%d",
@@ -282,7 +284,7 @@ void json_tpv_dump(const gps_mask_t changed, const struct gps_device_t *session,
     if (0 < gpsdata->fix.time.tv_sec) {
         // do not output ept if no time.
         if (isfinite(gpsdata->fix.ept) != 0)
-            str_appendf(reply, replylen, ",\"ept\":%.3f", gpsdata->fix.ept);
+            str_appendf(reply, replylen, ",\"ept\":%.6f", gpsdata->fix.ept);
     }
 
     // Galileo fields in the TPV
@@ -294,11 +296,13 @@ void json_tpv_dump(const gps_mask_t changed, const struct gps_device_t *session,
                                       tbuf, sizeof(tbuf)));
         str_appendf(reply, replylen, ",\"leapseconds_gal\":%d",
                     session->context->gal_leap_seconds);
+        str_appendf(reply, replylen, ",\"frac_gal\":%d",
+                    session->context->time_gal.tv_nsec);
     }
     if (0 < gpsdata->fix.time_gal.tv_sec) {
         // do not output ept_gal if no time_gal.
         if (isfinite(gpsdata->fix.gal_ept) != 0)
-            str_appendf(reply, replylen, ",\"ept_gal\":%.3f", gpsdata->fix.gal_ept);
+            str_appendf(reply, replylen, ",\"ept_gal\":%.6f", gpsdata->fix.gal_ept);
     }
 
     /*
