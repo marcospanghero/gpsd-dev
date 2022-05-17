@@ -2580,7 +2580,7 @@ ubx_msg_nav_timegal(struct gps_device_t *session, unsigned char *buf,
         timespec_t ts_tow;
         week = getles16(buf, 12);
         ts_tow.tv_sec = getleu32(buf, 4);
-        ts_tow.tv_nsec += (long)getles32(buf, 8);
+        ts_tow.tv_nsec = (long)getles32(buf, 8);
         TS_NORM(&ts_tow);
 
         session->newdata.time_gal = gpsd_galtime_resolv(session, week, ts_tow);
